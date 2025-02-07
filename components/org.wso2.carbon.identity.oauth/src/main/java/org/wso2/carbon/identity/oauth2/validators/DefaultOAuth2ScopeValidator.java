@@ -107,6 +107,24 @@ public class DefaultOAuth2ScopeValidator {
                         .getAuthorizationReqDTO().getUser(), appId, null, null, tenantDomain);
         handleInternalLoginScope(requestedScopes, authorizedScopes);
         removeRegisteredScopes(authzReqMessageContext);
+//        boolean runFga = false;
+//        ArrayList<String> fgaScopes = new ArrayList<>();
+//        for (String scope: requestedScopes) {
+//            if (scope.contains("fga")) {
+//                fgaScopes.add(scope);
+//                runFga = true;
+//            }
+//        }
+//        if (runFga) {
+//            try {
+//                FGAuthzReqContext reqContext = new FGAuthzReqContext(authzReqMessageContext);
+//                reqContext.setRequestedScopes(fgaScopes);
+//                authorizedScopes.addAll(FGAuthorizationEngineFactory.createServiceInstance()
+//                        .getAuthorizationService().getFGAuthorizedScopes(reqContext));
+//            } catch (Exception e) {
+//                LOG.error("An error occurred while trying to retrieve FGA service", e);
+//            }
+//        }
         return authorizedScopes;
     }
 
@@ -151,6 +169,24 @@ public class DefaultOAuth2ScopeValidator {
             authorizedScopes.remove(INTERNAL_LOGIN_SCOPE);
             authorizedScopes.remove(OPENID_SCOPE);
         }
+//        boolean runFga = false;
+//        ArrayList<String> fgaScopes = new ArrayList<>();
+//        for (String scope: requestedScopes) {
+//            if (scope.contains("fga")) {
+//                fgaScopes.add(scope);
+//                runFga = true;
+//            }
+//        }
+//        if (runFga) {
+//            try {
+//                FGAuthzReqContext reqContext = new FGAuthzReqContext(tokenReqMessageContext);
+//                reqContext.setRequestedScopes(fgaScopes);
+//                authorizedScopes.addAll(FGAuthorizationEngineFactory.createServiceInstance()
+//                        .getAuthorizationService().getFGAuthorizedScopes(reqContext));
+//            } catch (Exception e) {
+//                LOG.error("An error occurred while trying to retrieve FGA service", e);
+//            }
+//        }
         return authorizedScopes;
     }
 
