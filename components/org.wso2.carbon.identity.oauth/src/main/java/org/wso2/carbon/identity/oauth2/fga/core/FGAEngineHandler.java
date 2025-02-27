@@ -20,7 +20,6 @@ package org.wso2.carbon.identity.oauth2.fga.core;
 
 import org.wso2.carbon.identity.oauth.internal.OAuthComponentServiceHolder;
 import org.wso2.carbon.identity.oauth2.fga.services.FGADataManagementInterface;
-import org.wso2.carbon.identity.oauth2.fga.services.FGASchemaManagementInterface;
 import org.wso2.carbon.identity.oauth2.fga.services.FGAuthorizationInterface;
 
 /**
@@ -29,7 +28,6 @@ import org.wso2.carbon.identity.oauth2.fga.services.FGAuthorizationInterface;
 public class FGAEngineHandler {
 
     private static FGAuthorizationInterface authorizationService;
-    private static FGASchemaManagementInterface schemaManagementService;
     private static FGADataManagementInterface dataManagementService;
 
     public FGAuthorizationInterface getAuthorizationService() {
@@ -38,14 +36,6 @@ public class FGAEngineHandler {
             authorizationService = OAuthComponentServiceHolder.getInstance().getFGAuthorizationService();
         }
         return authorizationService;
-    }
-
-    public FGASchemaManagementInterface getSchemaManagementService() {
-
-        if (schemaManagementService == null) {
-            schemaManagementService = OAuthComponentServiceHolder.getInstance().getFGASchemaManagementService();
-        }
-        return schemaManagementService;
     }
 
     public FGADataManagementInterface getDataManagementService() {
