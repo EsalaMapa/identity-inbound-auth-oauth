@@ -56,6 +56,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.apache.oltu.oauth2.common.error.OAuthError.CodeResponse.INVALID_SCOPE;
 import static org.apache.oltu.oauth2.common.error.OAuthError.CodeResponse.UNAUTHORIZED_CLIENT;
@@ -344,7 +345,51 @@ public class AuthorizationHandlerManager {
 
         Set<String> validatedScopesSet = new HashSet<>(Arrays.asList(authzReqMsgCtx.getApprovedScope()));
         Set<String> requestedScopesSet = new HashSet<>(Arrays.asList(authzReqMsgCtx.getRequestedScopes()));
+        if (requestedScopesSet.stream().anyMatch(scope -> scope.contains("fga"))) {
+            Set<String> requestedFgaScopesSet = requestedScopesSet.stream()
+                    .filter(scope -> scope.contains("fga"))
+                    .collect(Collectors.toSet());
+            Set<String> requestedOtherScopesSet = requestedScopesSet.stream()
+                    .filter(scope -> !scope.contains("fga"))
+                    .collect(Collectors.toSet());
+
+            Set<String> validatedFgaScopesSet = validatedScopesSet.stream()
+                    .filter(scope -> scope.contains("fga"))
+                    .collect(Collectors.toSet());
+            Set<String> validatedOtherScopesSet = validatedScopesSet.stream()
+                    .filter(scope -> !scope.contains("fga"))
+                    .collect(Collectors.toSet());
+
+            return requestedOtherScopesSet.containsAll(validatedOtherScopesSet) &&
+                    areFgaScopesValidated(requestedFgaScopesSet, validatedFgaScopesSet);
+        }
         return requestedScopesSet.containsAll(validatedScopesSet);
+    }
+
+    private boolean areFgaScopesValidated(Set<String> requestedFgaScopesSet, Set<String> validatedFgaScopesSet) {
+        if (validatedFgaScopesSet.isEmpty()) {
+            return true;
+        }
+        if (requestedFgaScopesSet.containsAll(validatedFgaScopesSet)) {
+            return true;
+        }
+
+        Set<String> checkedScopes = new HashSet<>();
+        for (String scope : requestedFgaScopesSet) {
+            int scopeLength = scope.split("_").length;
+            if (scopeLength == 4) {
+                if (validatedFgaScopesSet.contains(scope)) {
+                    checkedScopes.add(scope);
+                }
+            } else if (scopeLength == 3) {
+                for (String item : validatedFgaScopesSet) {
+                    if (item.contains(scope)) {
+                        checkedScopes.add(item);
+                    }
+                }
+            }
+        }
+        return checkedScopes.containsAll(validatedFgaScopesSet);
     }
 
     /**

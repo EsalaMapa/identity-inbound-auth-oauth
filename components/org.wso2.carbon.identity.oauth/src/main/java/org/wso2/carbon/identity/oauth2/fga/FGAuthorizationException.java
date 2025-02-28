@@ -2,6 +2,10 @@ package org.wso2.carbon.identity.oauth2.fga;
 
 import org.wso2.carbon.identity.base.IdentityException;
 
+/**
+ * The {@code FGAuthorizationException} class represents the exception that is thrown when an error occurs during
+ * Fine-Grained Authorization related flows.
+ */
 public class FGAuthorizationException extends IdentityException {
 
     private String errorCode = null;

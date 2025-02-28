@@ -18,8 +18,6 @@
 
 package org.wso2.carbon.identity.oauth2.fga.factory;
 
-import org.wso2.carbon.identity.oauth2.fga.core.FGAEngineHandler;
-
 /**
  *
  */

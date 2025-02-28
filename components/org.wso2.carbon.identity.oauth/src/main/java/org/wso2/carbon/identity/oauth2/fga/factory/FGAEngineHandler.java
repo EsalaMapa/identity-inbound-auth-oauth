@@ -16,20 +16,27 @@
  * under the License.
  */
 
-package org.wso2.carbon.identity.oauth2.fga.core;
+package org.wso2.carbon.identity.oauth2.fga.factory;
 
 import org.wso2.carbon.identity.oauth.internal.OAuthComponentServiceHolder;
 import org.wso2.carbon.identity.oauth2.fga.services.FGADataManagementInterface;
 import org.wso2.carbon.identity.oauth2.fga.services.FGAuthorizationInterface;
 
 /**
- * This class handles the FGA connector registered as an OSGi service.
+ * The {@code FGAEngineHandler} class is a factory class for the FGAuthorizationEngine.
+ * It provides the authorization and data management services for Fine Grained Authorization by calling the
+ * OSGi service components.
  */
 public class FGAEngineHandler {
 
     private static FGAuthorizationInterface authorizationService;
     private static FGADataManagementInterface dataManagementService;
 
+    /**
+     * Returns the authorization service if an authorization engine specific service is active as an OSGi component.
+     *
+     * @return The authorization service.
+     */
     public FGAuthorizationInterface getAuthorizationService() {
 
         if (authorizationService == null) {
@@ -38,6 +45,12 @@ public class FGAEngineHandler {
         return authorizationService;
     }
 
+    /**
+     * Returns the data management service if an authorization engine specific data management service is active as an
+     * OSGi component.
+     *
+     * @return The data management service.
+     */
     public FGADataManagementInterface getDataManagementService() {
 
         if (dataManagementService == null) {
